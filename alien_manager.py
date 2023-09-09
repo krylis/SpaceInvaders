@@ -23,20 +23,25 @@ class AlienManager:
                 alien.goto(position)
                 self.aliens.append(alien)
 
+    def delete_alien(self, alien):
+        alien.clear()
+        alien.hideturtle()
+        self.aliens.remove(alien)
+
     def move_aliens(self):
-        if self.num_moves < 10:
+        if self.num_moves < 15:
             for alien in self.aliens:
                 alien.goto(alien.xcor() - MOVE_DISTANCE, alien.ycor())
-            self.num_moves += 1
-        elif self.num_moves < 20:
-            for alien in self.aliens:
-                alien.goto(alien.xcor() + MOVE_DISTANCE, alien.ycor())
             self.num_moves += 1
         elif self.num_moves < 30:
             for alien in self.aliens:
                 alien.goto(alien.xcor() + MOVE_DISTANCE, alien.ycor())
             self.num_moves += 1
-        elif self.num_moves < 40:
+        elif self.num_moves < 45:
+            for alien in self.aliens:
+                alien.goto(alien.xcor() + MOVE_DISTANCE, alien.ycor())
+            self.num_moves += 1
+        elif self.num_moves < 60:
             for alien in self.aliens:
                 alien.goto(alien.xcor() - MOVE_DISTANCE, alien.ycor())
             self.num_moves += 1

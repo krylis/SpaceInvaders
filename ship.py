@@ -14,6 +14,10 @@ class Ship(Turtle):
         self.setheading(90)
         self.goto(STARTING_POSITION)
 
+    def destroy_ship(self):
+        self.clear()
+        self.hideturtle()
+
     def move_right(self):
         self.goto(self.xcor() + MOVING_DISTANCE, self.ycor())
 

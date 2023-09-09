@@ -1,6 +1,6 @@
 from turtle import Turtle
 
-STARTING_POSITIONS = [(-200, -200), (-75, -200), (75, -200), (200, -200)]
+STARTING_POSITIONS = [(-150, -200), (-50, -200), (50, -200), (150, -200)]
 
 
 class BarrierManager:

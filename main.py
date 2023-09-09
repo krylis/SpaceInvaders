@@ -4,6 +4,7 @@ from projectile_manager import ProjectileManager
 from barrier_manager import BarrierManager
 from alien_manager import AlienManager
 import time
+import random
 
 screen = Screen()
 screen.setup(width=600, height=600)
@@ -12,32 +13,62 @@ screen.title("Space Invaders")
 screen.tracer(0)
 
 player = Ship()
-p_manager = ProjectileManager(player)
 b_manager = BarrierManager()
 a_manager = AlienManager()
+player_p_manager = ProjectileManager(player, "player")
+# choose random alien ship to shoot projectile
+alien_p_manager = ProjectileManager(random.choice(a_manager.aliens), "alien")
 
 screen.listen()
 screen.onkey(player.move_left, "Left")
 screen.onkey(player.move_right, "Right")
-screen.onkey(p_manager.create_projectile, "space")
+screen.onkey(player_p_manager.create_projectile, "space")
 
 is_game_on = True
 while is_game_on:
     time.sleep(0.1)
     screen.update()
 
-    '''moves player-created projectile across the screen once the user has
-    fired using the space bar'''
-    if p_manager.projectile:
-        p_manager.move_projectile()
-
-        # detect projectile collision with barrier
-        for barrier in b_manager.barriers:
-            if p_manager.projectile and p_manager.projectile.distance(barrier) < 20:
-                b_manager.delete_barrier(barrier)
-                p_manager.delete_projectile()
+    if not a_manager.aliens:
+        is_game_on = False
 
     # move aliens back and forth
     a_manager.move_aliens()
+
+    '''moves player-created projectile across the screen once the user has
+    fired using the space bar'''
+    if player_p_manager.projectile:
+        player_p_manager.move_projectile()
+
+        # detect projectile collision with barrier
+        for barrier in b_manager.barriers:
+            if player_p_manager.projectile and player_p_manager.projectile.distance(barrier) < 20:
+                b_manager.delete_barrier(barrier)
+                player_p_manager.delete_projectile()
+
+        # detect projectile collision with aliens
+        for alien in a_manager.aliens:
+            if player_p_manager.projectile and player_p_manager.projectile.distance(alien) < 20:
+                a_manager.delete_alien(alien)
+                player_p_manager.delete_projectile()
+
+    # fire projectile from random alien
+    if not alien_p_manager.projectile:
+        alien_p_manager = ProjectileManager(random.choice(a_manager.aliens), "alien")
+        alien_p_manager.create_projectile()
+    alien_p_manager.move_projectile()
+
+    # detect alien projectile collision with barrier
+    for barrier in b_manager.barriers:
+        if alien_p_manager.projectile and alien_p_manager.projectile.distance(barrier) < 20:
+            b_manager.delete_barrier(barrier)
+            alien_p_manager.delete_projectile()
+
+    # detect alien projectile collision with player ship and end game
+    if alien_p_manager.projectile and alien_p_manager.projectile.distance(player) < 20:
+        player.destroy_ship()
+        alien_p_manager.delete_projectile()
+        screen.update()
+        is_game_on = False
 
 screen.exitonclick()
