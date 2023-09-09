@@ -25,4 +25,5 @@ class ProjectileManager:
 
     def delete_projectile(self):
         self.projectile.clear()
+        self.projectile.hideturtle()
         self.projectile = None
