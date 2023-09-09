@@ -9,6 +9,9 @@ screen.title("Space Invaders")
 screen.tracer(0)
 
 player = Ship()
+screen.listen()
+screen.onkey(player.move_left, "Left")
+screen.onkey(player.move_right, "Right")
 
 is_game_on = True
 while is_game_on:

@@ -1,6 +1,7 @@
 from turtle import Turtle
 
 STARTING_POSITION = (0, -260)
+MOVING_DISTANCE = 10
 
 
 class Ship(Turtle):
@@ -12,3 +13,9 @@ class Ship(Turtle):
         self.color("green")
         self.setheading(90)
         self.goto(STARTING_POSITION)
+
+    def move_right(self):
+        self.goto(self.xcor() + MOVING_DISTANCE, self.ycor())
+
+    def move_left(self):
+        self.goto(self.xcor() - MOVING_DISTANCE, self.ycor())
