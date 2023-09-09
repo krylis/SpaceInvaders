@@ -3,6 +3,7 @@ from ship import Ship
 from projectile_manager import ProjectileManager
 from barrier_manager import BarrierManager
 from alien_manager import AlienManager
+from scoreboard import Scoreboard
 import time
 import random
 
@@ -12,7 +13,9 @@ screen.bgcolor("black")
 screen.title("Space Invaders")
 screen.tracer(0)
 
+# initialize all the needed objects
 player = Ship()
+scoreboard = Scoreboard()
 b_manager = BarrierManager()
 a_manager = AlienManager()
 player_p_manager = ProjectileManager(player, "player")
@@ -29,6 +32,7 @@ while is_game_on:
     time.sleep(0.1)
     screen.update()
 
+    # end game if there are no more aliens
     if not a_manager.aliens:
         is_game_on = False
 
@@ -40,17 +44,18 @@ while is_game_on:
     if player_p_manager.projectile:
         player_p_manager.move_projectile()
 
-        # detect projectile collision with barrier
+        # detect player's projectile collision with barrier
         for barrier in b_manager.barriers:
             if player_p_manager.projectile and player_p_manager.projectile.distance(barrier) < 20:
                 b_manager.delete_barrier(barrier)
                 player_p_manager.delete_projectile()
 
-        # detect projectile collision with aliens
+        # detect player's projectile collision with aliens
         for alien in a_manager.aliens:
             if player_p_manager.projectile and player_p_manager.projectile.distance(alien) < 20:
                 a_manager.delete_alien(alien)
                 player_p_manager.delete_projectile()
+                scoreboard.increase_score()
 
     # fire projectile from random alien
     if not alien_p_manager.projectile:
@@ -70,5 +75,10 @@ while is_game_on:
         alien_p_manager.delete_projectile()
         screen.update()
         is_game_on = False
+
+if a_manager.aliens:
+    scoreboard.game_over("You lose!")
+else:
+    scoreboard.game_over("You win!")
 
 screen.exitonclick()
