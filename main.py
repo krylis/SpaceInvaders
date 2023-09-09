@@ -14,6 +14,7 @@ screen.title("Space Invaders")
 screen.tracer(0)
 
 # initialize all the needed objects
+game_speed = 0.1
 player = Ship()
 scoreboard = Scoreboard()
 b_manager = BarrierManager()
@@ -29,7 +30,7 @@ screen.onkey(player_p_manager.create_projectile, "space")
 
 is_game_on = True
 while is_game_on:
-    time.sleep(0.1)
+    time.sleep(game_speed)
     screen.update()
 
     # end game if there are no more aliens
@@ -56,6 +57,7 @@ while is_game_on:
                 a_manager.delete_alien(alien)
                 player_p_manager.delete_projectile()
                 scoreboard.increase_score()
+                game_speed = game_speed * 0.9
 
     # fire projectile from random alien
     if not alien_p_manager.projectile:
@@ -77,8 +79,8 @@ while is_game_on:
         is_game_on = False
 
 if a_manager.aliens:
-    scoreboard.game_over("You lose!")
+    scoreboard.game_over("Better luck next time.")
 else:
-    scoreboard.game_over("You win!")
+    scoreboard.game_over("Winner!")
 
 screen.exitonclick()
