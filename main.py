@@ -2,6 +2,7 @@ from turtle import Screen
 from ship import Ship
 from projectile_manager import ProjectileManager
 from barrier_manager import BarrierManager
+from alien_manager import AlienManager
 import time
 
 screen = Screen()
@@ -13,6 +14,7 @@ screen.tracer(0)
 player = Ship()
 p_manager = ProjectileManager(player)
 b_manager = BarrierManager()
+a_manager = AlienManager()
 
 screen.listen()
 screen.onkey(player.move_left, "Left")
@@ -34,5 +36,8 @@ while is_game_on:
             if p_manager.projectile and p_manager.projectile.distance(barrier) < 20:
                 b_manager.delete_barrier(barrier)
                 p_manager.delete_projectile()
+
+    # move aliens back and forth
+    a_manager.move_aliens()
 
 screen.exitonclick()
